@@ -1,0 +1,23 @@
+# Environment variables — never commit real keys
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Next.js build output
+frontend/.next/
+frontend/out/
+
+# Backend build output
+backend/dist/
+
+# OS / editor
+.DS_Store
+.claude/
+
+# Temp files from orchestrator session
+backend-CLAUDE.md
+frontend-CLAUDE.md
+contracts-api.types.ts
