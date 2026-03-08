@@ -72,4 +72,18 @@
 
 ---
 
+## Incremental — Conflict Zone Map Panel ✅ COMPLETE
+
+**Completed:** 2026-03-02
+
+### Done:
+- [x] Installed `react-leaflet`, `leaflet`, `@types/leaflet` in `frontend/`
+- [x] `components/panels/ConflictMapInner.tsx` — client-only Leaflet map, CartoDB Dark Matter tiles, CSS-filtered green tint, 5 hardcoded conflict zone circles with status-based colors/dash patterns and permanent tooltips
+- [x] `components/panels/ConflictMap.tsx` — SSR-safe wrapper via `dynamic(..., { ssr: false })`, `// CONFLICT ZONE` panel header, `[MIDDLE EAST]` region label, blinking loading state
+- [x] `app/page.tsx` — `<ConflictMap />` inserted between status bar and 3-col main grid
+- [x] `app/globals.css` — Leaflet container override, `.ops-tile-layer` filter tint, `.ops-zone-tooltip` military theme
+- [x] `npm run build` passes clean ✅
+
+---
+
 ## Phase 4 — Deploy ⏳ PENDING

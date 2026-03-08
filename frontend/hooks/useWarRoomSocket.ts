@@ -5,7 +5,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useWarRoom } from '../lib/context';
-import type { WsMessage, NewsArticle, MarketData, SocialPost } from '../lib/types';
+import type { WsMessage, NewsArticle, MarketData, SocialPost, WeatherData } from '../lib/types';
 
 const WS_URL = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001';
 const MAX_BACKOFF_MS = 30_000;
@@ -72,8 +72,13 @@ export function useWarRoomSocket(): { connected: boolean } {
                   payload: msg.payload as SocialPost[],
                 });
                 break;
+              case 'WEATHER_UPDATE':
+                dispatchRef.current({
+                  type: 'SET_WEATHER',
+                  payload: msg.payload as WeatherData[],
+                });
+                break;
               case 'TICKER_UPDATE':
-                // Handled via news state in ThreatTicker
                 break;
               default:
                 break;

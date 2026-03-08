@@ -1,6 +1,7 @@
 import { fetchNews } from '../services/news.service';
 import { fetchMarkets } from '../services/markets.service';
 import { fetchSocial } from '../services/social.service';
+import { fetchWeather } from '../services/weather.service';
 import cache, { CACHE_KEYS, TTL } from '../cache';
 import { broadcast } from '../websocket';
 import { WsMessage } from '../../../contracts/api.types';
@@ -56,6 +57,23 @@ async function runSocialWorker(): Promise<void> {
   }
 }
 
+async function runWeatherWorker(): Promise<void> {
+  try {
+    console.log('[Worker] Fetching weather...');
+    const data = await fetchWeather();
+    cache.set(CACHE_KEYS.WEATHER, data, TTL.WEATHER);
+    const message: WsMessage = {
+      event: 'WEATHER_UPDATE',
+      payload: data,
+      timestamp: new Date().toISOString(),
+    };
+    broadcast(message);
+    console.log(`[Worker] Weather updated: ${data.length} locations`);
+  } catch (err) {
+    console.error('[Worker] Weather worker error:', (err as Error).message);
+  }
+}
+
 export function startWorkers(): void {
   console.log('[Workers] Starting all background workers...');
 
@@ -63,11 +81,13 @@ export function startWorkers(): void {
   void runNewsWorker();
   void runMarketsWorker();
   void runSocialWorker();
+  void runWeatherWorker();
 
   // Schedule recurring runs
   setInterval(() => { void runNewsWorker(); }, TTL.NEWS * 1000);
   setInterval(() => { void runMarketsWorker(); }, TTL.MARKETS * 1000);
   setInterval(() => { void runSocialWorker(); }, TTL.SOCIAL * 1000);
+  setInterval(() => { void runWeatherWorker(); }, TTL.WEATHER * 1000);
 
   console.log('[Workers] All workers scheduled');
 }

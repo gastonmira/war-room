@@ -14,6 +14,7 @@ function sendCurrentState(ws: WebSocket): void {
     { key: CACHE_KEYS.NEWS, event: 'NEWS_UPDATE' },
     { key: CACHE_KEYS.MARKETS, event: 'MARKETS_UPDATE' },
     { key: CACHE_KEYS.SOCIAL, event: 'SOCIAL_UPDATE' },
+    { key: CACHE_KEYS.WEATHER, event: 'WEATHER_UPDATE' },
   ];
 
   for (const { key, event } of events) {

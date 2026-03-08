@@ -4,12 +4,13 @@
 // Full-width bottom bar — scrolling threat/market ticker
 
 import React from 'react';
-import type { MarketData } from '../../lib/types';
+import type { MarketData, WeatherData } from '../../lib/types';
 import { formatPrice } from '../../lib/utils';
 
 interface ThreatTickerProps {
   headlines: string[];
   markets?: MarketData[];
+  weather?: WeatherData[];
 }
 
 function MarketInline({ market }: { market: MarketData }) {
@@ -39,7 +40,28 @@ function MarketInline({ market }: { market: MarketData }) {
   );
 }
 
-export default function ThreatTicker({ headlines, markets = [] }: ThreatTickerProps) {
+function WeatherInline({ weather }: { weather: WeatherData }) {
+  const icon = weather.condition === 'dust' || weather.condition === 'sand' ? '💨' 
+    : weather.condition === 'rain' ? '🌧️'
+    : weather.condition === 'fog' ? '🌫️'
+    : weather.condition === 'cloudy' ? '☁️'
+    : '☀️';
+  const windDir = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round(weather.windDirection / 45) % 8];
+  return (
+    <span style={{ margin: '0 16px' }}>
+      <span style={{ color: '#6b7f6b', marginRight: '4px' }}>{weather.location}</span>
+      <span className="text-xs font-mono" style={{ color: '#c8d8c0' }}>
+        {icon} {weather.temperature}° {weather.windSpeed}km/h {windDir}
+      </span>
+      {weather.visibility < 5 && (
+        <span style={{ color: '#ffaa00', marginLeft: '4px' }}>VIS:{weather.visibility}km</span>
+      )}
+      <span style={{ color: '#1e3a2f', margin: '0 8px' }}>|</span>
+    </span>
+  );
+}
+
+export default function ThreatTicker({ headlines, markets = [], weather = [] }: ThreatTickerProps) {
   // Build the full ticker content — interleave headlines and market data
   const tickerItems: React.ReactNode[] = [];
 
@@ -62,6 +84,12 @@ export default function ThreatTicker({ headlines, markets = [] }: ThreatTickerPr
       const market = markets[Math.floor(i / 2) % markets.length];
       tickerItems.push(<MarketInline key={`m-${i}`} market={market} />);
     }
+
+    // Inject weather item after market
+    if (weather.length > 0 && markets.length > 0 && (i + 1) % 2 === 0) {
+      const w = weather[(Math.floor(i / 2) + i) % weather.length];
+      tickerItems.push(<WeatherInline key={`w-${i}`} weather={w} />);
+    }
   });
 
   // Duplicate for seamless loop — add suffix to keys to ensure uniqueness
@@ -80,6 +108,10 @@ export default function ThreatTicker({ headlines, markets = [] }: ThreatTickerPr
       if (markets.length > 0 && (i + 1) % 2 === 0) {
         const market = markets[Math.floor(i / 2) % markets.length];
         items.push(<MarketInline key={`m2-${i}`} market={market} />);
+      }
+      if (weather.length > 0 && markets.length > 0 && (i + 1) % 2 === 0) {
+        const w = weather[(Math.floor(i / 2) + i) % weather.length];
+        items.push(<WeatherInline key={`w2-${i}`} weather={w} />);
       }
       return items;
     }).flat(),

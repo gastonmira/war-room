@@ -10,6 +10,7 @@ import { wss } from './websocket';
 import newsRouter from './routes/news';
 import marketsRouter from './routes/markets';
 import socialRouter from './routes/social';
+import weatherRouter from './routes/weather';
 import articleRouter from './routes/article';
 import { startWorkers } from './workers';
 
@@ -30,6 +31,7 @@ app.use(
 app.use('/api/news', newsRouter);
 app.use('/api/markets', marketsRouter);
 app.use('/api/social', socialRouter);
+app.use('/api/weather', weatherRouter);
 app.use('/api/article', articleRouter);
 
 // Health check
