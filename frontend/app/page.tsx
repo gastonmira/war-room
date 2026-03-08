@@ -11,7 +11,8 @@ import ArticleViewer from '../components/panels/ArticleViewer';
 import MarketWatch from '../components/panels/MarketWatch';
 import SocialSignals from '../components/panels/SocialSignals';
 import ThreatTicker from '../components/panels/ThreatTicker';
-import type { NewsArticle, ApiResponse, ParsedArticle } from '../lib/types';
+import ConflictMap from '../components/panels/ConflictMap';
+import type { NewsArticle, ApiResponse, ParsedArticle, WeatherData } from '../lib/types';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
 
@@ -59,6 +60,19 @@ export default function WarRoomPage() {
         }
       } catch {
         // Fall back to mocks
+      }
+
+      // Fetch weather
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/weather`);
+        if (res.ok) {
+          const json: ApiResponse<WeatherData[]> = await res.json();
+          if (json.data && json.data.length > 0) {
+            dispatch({ type: 'SET_WEATHER', payload: json.data });
+          }
+        }
+      } catch {
+        // Weather unavailable
       }
     }
 
@@ -166,6 +180,9 @@ export default function WarRoomPage() {
         </span>
       </div>
 
+      {/* Conflict Zone Map */}
+      <ConflictMap weather={state.weather} />
+
       {/* Main Grid */}
       <div
         style={{
@@ -229,7 +246,7 @@ export default function WarRoomPage() {
       </div>
 
       {/* Bottom — Threat Ticker */}
-      <ThreatTicker headlines={allHeadlines} markets={state.markets} />
+      <ThreatTicker headlines={allHeadlines} markets={state.markets} weather={state.weather} />
     </div>
   );
 }

@@ -6,12 +6,14 @@ export const CACHE_KEYS = {
   NEWS: 'news_feed',
   MARKETS: 'market_data',
   SOCIAL: 'social_posts',
+  WEATHER: 'weather_data',
 };
 
 export const TTL = {
   NEWS: 60,
   MARKETS: 30,
   SOCIAL: 90,
+  WEATHER: 1800,
   ARTICLE: 1800,
 };
 

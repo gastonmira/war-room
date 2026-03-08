@@ -33,6 +33,18 @@ export interface SocialPost {
   url: string;
 }
 
+export interface WeatherData {
+  location: string;
+  coords: [number, number];
+  temperature: number;
+  windSpeed: number;
+  windDirection: number;
+  visibility: number;
+  condition: 'clear' | 'cloudy' | 'dust' | 'sand' | 'rain' | 'fog';
+  humidity: number;
+  updatedAt: string;
+}
+
 export interface ParsedArticle {
   title: string;
   content: string; // HTML string, sanitized
@@ -55,10 +67,11 @@ export type WsEventType =
   | 'NEWS_UPDATE'
   | 'MARKETS_UPDATE'
   | 'SOCIAL_UPDATE'
+  | 'WEATHER_UPDATE'
   | 'TICKER_UPDATE';
 
 export interface WsMessage {
   event: WsEventType;
-  payload: NewsArticle[] | MarketData[] | SocialPost[];
-  timestamp: string; // ISO 8601
+  payload: NewsArticle[] | MarketData[] | SocialPost[] | WeatherData[];
+  timestamp: string;
 }

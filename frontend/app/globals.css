@@ -132,3 +132,28 @@ body::before {
   margin: 2px 0;
   vertical-align: middle;
 }
+
+/* ── Leaflet military theme overrides ─────────────────────────────────── */
+.leaflet-container {
+  background: #0a0c0f !important;
+  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+}
+
+/* Tint dark CartoDB tiles toward green palette */
+.ops-tile-layer {
+  filter: brightness(0.75) hue-rotate(90deg) saturate(0.5) contrast(1.05);
+}
+
+/* Conflict zone tooltip styling */
+.ops-zone-tooltip {
+  background: #0f1318 !important;
+  border: 1px solid #1e3a2f !important;
+  color: #c8d8c0 !important;
+  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.08em !important;
+  padding: 2px 6px !important;
+  box-shadow: none !important;
+}
+
+.ops-zone-tooltip::before { display: none !important; }
